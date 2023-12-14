@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: prod-app
+spec:
+  containers:
+    - name: web-01
+      image: nginx:1.21
+      volumeMounts:
+        - name: web-01-content
+          mountPath: /usr/share/nginx/html
+    - name: messaging-server
+      image: redis
+    - name: queuing-server
+      image: memcached
+  volumes:
+    - name: web-01-content
+      configMap:
+        name: web-01-configmap
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-01-configmap
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Hello Alstom</title>
+    </head>
+    <body>
+      <h1>Hello Alstom</h1>
+    </body>
+    </html>
